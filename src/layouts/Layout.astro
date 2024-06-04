@@ -1,0 +1,32 @@
+---
+// To use MojoSCG you need at least MojoCSS 0.2.0
+import MojoSCG from "mojocss/src/interop/scg";
+import config from "../../mojo.config.js";
+
+const html = await Astro.slots.render("default");
+
+const mojoSCG = new MojoSCG(html, config);
+const css = mojoSCG.render();
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<style is:inline set:html={css}></style>
+	</head>
+	<body>
+		<div set:html={mojoSCG.document.body.innerHTML} />
+	</body>
+</html>
